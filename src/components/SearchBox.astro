@@ -1,0 +1,64 @@
+---
+import temp_min from "../images/baja-temperatura.png";
+import temp_max from "../images/temperatura_maxima.png";
+import humedad from "../images/humedad.png";
+import ubicacion from "../images/pin-de-ubicacion.png";
+import viento from "../images/viento.png";
+import sunrise from "../images/sunrise.png";
+import sunset from "../images/sunset.png";
+import { Image } from "astro:assets";
+---
+
+<div class="main bg-base-100 p-8 rounded-lg shadow-lg">
+    <div class="input_content mx-auto">
+        <div class="join w-full justify-center items-center">
+            <input id="inputText" required class="join-item w-full input input-bordered" type="text" placeholder="Ingresa tu ubicación"/>
+            <button id="submit" class="join-item btn btn-primary">Buscar</button>
+        </div>
+        <div class="error my-4">
+            <p id="fail" class="w-9/12 mx-auto text-red-600 text-center"></p>
+        </div>
+    </div>
+
+    <div id="clima" class="respuesta self-center justify-self-center shadow-lg rounded-lg">
+        <div id="response" class="flex flex-col justify-center items-center w-full p-4">
+            <div class="ciudad flex flex-row justify-center items-center pt-2">
+                <Image class="w-8" src={ubicacion} alt="Ubicacion" />
+                <p class="text-lg" id="ciudad"></p>
+            </div>
+            <p class="text-8xl p-4" id="temperatura"></p>
+            <p id="descripcion" class="uppercase text-lg"></p>
+            <div class="temp_container flex flex-row justify-between items-center gap-4 p-4">
+                <div class="temp_min shadow-lg rounded-lg flex flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={temp_min} alt="Temperatura minima" />
+                    <p id="temperatura_min"></p>
+                </div>
+                <div class="temp_max flex shadow-lg rounded-lg flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={temp_max} alt="Temperatura máxima" />
+                    <p id="temperatura_max"></p>
+                </div>
+            </div>
+            <div class="hviento_container flex flex-row justify-between items-center gap-4 p-4">
+                <div class="humedad  shadow-lg rounded-lg flex flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={humedad} alt="humedad" />
+                    <p id="humedad"></p>
+                </div>
+                <div class="viento flex  shadow-lg rounded-lg flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={viento} alt="Viento" />
+                    <p id="viento"></p>
+                </div>
+            </div>
+            <div class="sol_container flex flex-row justify-between items-center gap-4 p-4">
+                <div class="humedad  shadow-lg rounded-lg flex flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={sunrise} alt="Salida de sol" />
+                    <p id="salidaSol"></p>
+                </div>
+                <div class="viento flex shadow-lg rounded-lg flex-row justify-center items-center gap-2 p-2">
+                    <Image class="w-6" src={sunset} alt="Puesta de sol" />
+                    <p id="puestaSol"></p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

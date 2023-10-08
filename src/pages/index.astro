@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SearchBox from '../components/SearchBox.astro';
+---
+
+<Layout>
+	<main>
+		<SearchBox />
+	</main>
+</Layout>
+<script>
+
+    const ciudad = document.getElementById("ciudad");
+    const temperatura = document.getElementById("temperatura");
+    const temp_min = document.getElementById("temperatura_min");
+    const temp_max = document.getElementById("temperatura_max");
+    const descripcion = document.getElementById("descripcion")
+    const fail = document.getElementById('fail');
+    const humedad = document.getElementById("humedad");
+    const viento = document.getElementById("viento");
+    const salidaSol = document.getElementById("salidaSol");
+    const puestaSol = document.getElementById("puestaSol");
+    const climaContainer = document.getElementById("clima");
+    function reset() {
+        ciudad.innerHTML = ""
+        temperatura.innerHTML = "";
+        temp_max.innerHTML = "";
+        temp_min.innerHTML = "";
+        humedad.innerHTML = "";
+        fail.innerText = "";
+        descripcion.innerHTML = "";
+        viento.innerHTML = "";
+        salidaSol.innerHTML = "";
+        puestaSol.innerHTML = "";
+    }
+    
+    const btnSubmit = document.getElementById('submit');
+    const apiKey= "b660b959d580a2996cb0f3517ab8d01f"
+    
+    async function getWeather(apiKey, location) {
+        const response = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${apiKey}&lang=es`)
+                                .then(result => result.json())
+                                .catch(error => fail.innerHTML = error);
+
+        if (response == "") {
+            fail.innerHTML = "Ops, algo salio mal, no se pudo obtener tu localización";
+        }
+        else {
+            getWeatherData(response, apiKey);
+        }
+}
+    async function getWeatherData(response, apiKey) {
+        let lat = response[0].lat;
+        let lon = response[0].lon;
+        const weather = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&cnt=3&appid=${apiKey}&units=metric&lang=es`)
+                                .then(data => data.json())
+                                .catch(err => fail.innerHTML = err);
+        if( weather == "") {
+            fail.innerHTML = "Ops, algo salio mal, no se pudo consultar los datos del clima para tu ubicación"
+        }
+        else {
+            let country = weather.sys.country;
+            ciudad.innerHTML = weather.name + ", " + country;
+            temperatura.innerHTML = weather.main.temp + " °C";
+            temp_max.innerHTML = weather.main.temp_max + " °C";
+            temp_min.innerHTML = weather.main.temp_min + " °C";
+            humedad.innerHTML = weather.main.humidity + " %";
+            descripcion.innerHTML = weather.weather[0].description;
+            viento.innerHTML = weather.wind.speed + " km/h";
+            let sunrise = new Date(weather.sys.sunrise * 1000);
+            let sunset = new Date(weather.sys.sunset * 1000);
+            salidaSol.innerHTML= sunrise.toLocaleTimeString();
+            puestaSol.innerText = sunset.toLocaleTimeString();
+        }
+    }
+
+    btnSubmit.addEventListener('click', ()=> {   
+        let location = document.getElementById('inputText').value;     
+        if(location != '') {
+            reset();
+            getWeather(apiKey, location);
+        }
+        else {
+            fail.innerHTML = "¡Necesito una ubicación!"
+        }
+    });
+</script>
